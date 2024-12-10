@@ -30,7 +30,7 @@ function renderTable() {
                 <td>${product.size}</td>
                 <td class="actions">
                     <button onclick="editProduct(${product.id})">Editar</button>
-                    <button onclick="deleteProduct(${product.id})">Eliminar</button>
+                    <button onclick="deleteProduct('${product.id}')">Eliminar</button>
                 </td>
             </tr>
         `;
@@ -104,6 +104,7 @@ async function deleteProduct(id) {
             if (response.ok) {
                 products = products.filter(product => product.id !== id);
                 renderTable();
+                alert("Producto eliminado correctamente.");
             } else {
                 const error = await response.json();
                 console.error("Error al eliminar el producto:", error);
@@ -115,6 +116,7 @@ async function deleteProduct(id) {
         }
     }
 }
+
 
 document.getElementById("productForm").addEventListener("submit", async function (e) {
     e.preventDefault();

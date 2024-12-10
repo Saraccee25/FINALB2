@@ -61,6 +61,7 @@ public class ProductService {
             product.setCategory(updatedProduct.getCategory());
             product.setPrice(updatedProduct.getPrice());
             product.setStock(updatedProduct.getStock());
+            product.setSize(updatedProduct.getSize());
             return productRepository.save(product);
         } else {
             throw new ProductNotFoundException("El producto con el ID " + id + " no existe.");
