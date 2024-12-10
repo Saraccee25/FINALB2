@@ -139,6 +139,10 @@ async function deleteProduct(id) {
 document.getElementById("addProductForm").addEventListener("submit", async function (e) {
     e.preventDefault();
 
+    if (!validateAddProductForm()) {
+        return; 
+    }
+
     const name = document.getElementById("addProductName").value;
     const category = document.getElementById("addProductCategory").value;
     const price = parseFloat(document.getElementById("addProductPrice").value);
@@ -179,6 +183,10 @@ document.getElementById("addProductForm").addEventListener("submit", async funct
 
 document.getElementById("editProductForm").addEventListener("submit", async function (e) {
     e.preventDefault();
+
+    if (!validateEditProductForm()) {
+        return; 
+    }
 
     const id = document.getElementById("editProductId").value;
     const name = document.getElementById("editProductName").value;
@@ -221,3 +229,76 @@ document.getElementById("editProductForm").addEventListener("submit", async func
 });
 
 fetchProducts();
+
+// Validación para el formulario de agregar producto
+function validateAddProductForm() {
+    const name = document.getElementById("addProductName").value.trim();
+    const category = document.getElementById("addProductCategory").value;
+    const price = parseFloat(document.getElementById("addProductPrice").value);
+    const stock = parseInt(document.getElementById("addProductStock").value);
+    const size = document.getElementById("addProductSize").value.trim();
+
+    if (!name || name.length < 2) {
+        alert("El nombre del producto es obligatorio y debe tener al menos 2 caracteres.");
+        return false;
+    }
+
+    if (!category) {
+        alert("Por favor, seleccione una categoría.");
+        return false;
+    }
+
+    if (isNaN(price) || price <= 0) {
+        alert("El precio debe ser un número mayor que cero.");
+        return false;
+    }
+
+    if (isNaN(stock) || stock < 0) {
+        alert("El stock debe ser un número mayor o igual a cero.");
+        return false;
+    }
+
+    if (!size) {
+        alert("La talla es obligatoria.");
+        return false;
+    }
+
+    return true;
+}
+
+// Validación para el formulario de editar producto
+function validateEditProductForm() {
+    const name = document.getElementById("editProductName").value.trim();
+    const category = document.getElementById("editProductCategory").value;
+    const price = parseFloat(document.getElementById("editProductPrice").value);
+    const stock = parseInt(document.getElementById("editProductStock").value);
+    const size = document.getElementById("editProductSize").value.trim();
+
+    if (!name || name.length < 2) {
+        alert("El nombre del producto es obligatorio y debe tener al menos 2 caracteres.");
+        return false;
+    }
+
+    if (!category) {
+        alert("Por favor, seleccione una categoría.");
+        return false;
+    }
+
+    if (isNaN(price) || price <= 0) {
+        alert("El precio debe ser un número mayor que cero.");
+        return false;
+    }
+
+    if (isNaN(stock) || stock < 0) {
+        alert("El stock debe ser un número mayor o igual a cero.");
+        return false;
+    }
+
+    if (!size) {
+        alert("La talla es obligatoria.");
+        return false;
+    }
+
+    return true;
+}
+

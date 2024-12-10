@@ -3,9 +3,12 @@ package com.example.finalBD2.controller;
 import com.example.finalBD2.entity.Product;
 import com.example.finalBD2.exception.ProductNotFoundException;
 import com.example.finalBD2.service.ProductService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -24,7 +27,11 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<Product> addProduct(@RequestBody Product product) {
+    public ResponseEntity<?> addProduct(@Valid @RequestBody Product product, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(bindingResult.getAllErrors());
+        }
+
         Product createdProduct = productService.addProduct(product);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdProduct);
     }
@@ -63,7 +70,11 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateProduct(@PathVariable String id, @RequestBody Product updatedProduct) {
+    public ResponseEntity<?> updateProduct(@PathVariable String id, @Valid @RequestBody Product updatedProduct, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(bindingResult.getAllErrors());
+        }
+
         try {
             Product product = productService.updateProduct(id, updatedProduct);
             return ResponseEntity.ok(product);
