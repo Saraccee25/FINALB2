@@ -4,64 +4,69 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fashion Line - Gestión de Inventario</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
 <header>
     <h1>Fashion Line - Gestión de Inventario</h1>
 </header>
 
-<div class="filters">
-    <div>
-        <input type="text" id="nameFilter" placeholder="Filtrar por nombre">
-        <select id="categoryFilter">
-            <option value="">Todas las categorías</option>
-            <option value="Camisetas">Camisetas</option>
-            <option value="Pantalones">Pantalones</option>
-            <option value="Vestidos">Vestidos</option>
-            <option value="Accesorios">Accesorios</option>
-        </select>
-        <button onclick="applyFilters()">Aplicar Filtros</button>
-        <button onclick="clearFilters()">Limpiar Filtros</button>
+<div class="container">
+    <div class="filters">
+        <div class="filters-left">
+            <input type="text" id="nameFilter" placeholder="Filtrar por nombre">
+            <select id="categoryFilter">
+                <option value="">Todas las categorías</option>
+                <option value="Camisetas">Camisetas</option>
+                <option value="Pantalones">Pantalones</option>
+                <option value="Vestidos">Vestidos</option>
+                <option value="Accesorios">Accesorios</option>
+            </select>
+            <button onclick="applyFilters()"><i class="fas fa-search"></i> Aplicar Filtros</button>
+            <button onclick="clearFilters()" class="secondary"><i class="fas fa-times"></i> Limpiar Filtros</button>
+        </div>
+        <button onclick="openAddModal()"><i class="fas fa-plus"></i> Agregar Producto</button>
     </div>
-    <button onclick="openAddModal()">Agregar Producto</button>
+
+    <table id="inventoryTable">
+        <thead>
+        <tr>
+            <th style="display: none;">ID</th>
+            <th>Nombre</th>
+            <th>Categoría</th>
+            <th>Precio</th>
+            <th>Stock</th>
+            <th>Talla</th>
+            <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
 </div>
 
 
-<table id="inventoryTable">
-    <thead>
-    <tr>
-        <th style="display: none;">ID</th>
-        <th>Nombre</th>
-        <th>Categoría</th>
-        <th>Precio</th>
-        <th>Stock</th>
-        <th>Talla</th>
-        <th>Acciones</th>
-    </tr>
-    </thead>
-    <tbody>
-    <!-- Los productos se cargarán aquí dinámicamente -->
-    </tbody>
-</table>
-
-<!-- Modal para agregar producto -->
 <div id="addProductModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeAddProductModal()">&times;</span>
         <h2>Agregar Producto</h2>
         <form id="addProductForm">
-            <input type="text" id="addProductName" placeholder="Nombre del producto" required><br><br>
+            <input type="text" id="addProductName" placeholder="Nombre del producto" required>
             <select id="addProductCategory" required>
                 <option value="">Seleccionar categoría</option>
                 <option value="Camisetas">Camisetas</option>
                 <option value="Pantalones">Pantalones</option>
                 <option value="Vestidos">Vestidos</option>
                 <option value="Accesorios">Accesorios</option>
-            </select><br><br>
-            <input type="number" id="addProductPrice" placeholder="Precio" required><br><br>
-            <input type="number" id="addProductStock" placeholder="Stock" required><br><br>
-            <input type="text" id="addProductSize" placeholder="Talla" required><br><br>
+                <option value="Zapatos">Zapatos</option>
+                <option value="RopaInterior">Ropa interior</option>
+            </select>
+            <input type="number" id="addProductPrice" placeholder="Precio" required>
+            <input type="number" id="addProductStock" placeholder="Stock" required>
+            <input type="text" id="addProductSize" placeholder="Talla" required>
             <button type="submit">Guardar</button>
         </form>
     </div>
@@ -74,17 +79,17 @@
         <h2>Editar Producto</h2>
         <form id="editProductForm">
             <input type="hidden" id="editProductId">
-            <input type="text" id="editProductName" placeholder="Nombre del producto" required><br><br>
+            <input type="text" id="editProductName" placeholder="Nombre del producto" required>
             <select id="editProductCategory" required>
                 <option value="">Seleccionar categoría</option>
                 <option value="Camisetas">Camisetas</option>
                 <option value="Pantalones">Pantalones</option>
                 <option value="Vestidos">Vestidos</option>
                 <option value="Accesorios">Accesorios</option>
-            </select><br><br>
-            <input type="number" id="editProductPrice" placeholder="Precio" required><br><br>
-            <input type="number" id="editProductStock" placeholder="Stock" required><br><br>
-            <input type="text" id="editProductSize" placeholder="Talla" required><br><br>
+            </select>
+            <input type="number" id="editProductPrice" placeholder="Precio" required>
+            <input type="number" id="editProductStock" placeholder="Stock" required>
+            <input type="text" id="editProductSize" placeholder="Talla" required>
             <button type="submit">Actualizar</button>
         </form>
     </div>
