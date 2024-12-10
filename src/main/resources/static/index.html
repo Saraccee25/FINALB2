@@ -29,11 +29,12 @@
 <table id="inventoryTable">
     <thead>
     <tr>
-        <th>ID</th>
+        <th style="display: none;">ID</th>
         <th>Nombre</th>
         <th>Categoría</th>
         <th>Precio</th>
         <th>Stock</th>
+        <th>Talla</th>
         <th>Acciones</th>
     </tr>
     </thead>
@@ -58,6 +59,7 @@
             </select><br><br>
             <input type="number" id="productPrice" placeholder="Precio" required><br><br>
             <input type="number" id="productStock" placeholder="Stock" required><br><br>
+            <input type="text" id="productSize" placeholder="Talla" required><br><br>
             <button type="submit">Guardar</button>
         </form>
     </div>
