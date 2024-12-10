@@ -38,34 +38,35 @@ function renderTable() {
     });
 }
 
-function applyFilters() {
+async function applyFilters() {
     const nameFilter = document.getElementById("nameFilter").value.toLowerCase();
     const categoryFilter = document.getElementById("categoryFilter").value;
 
-    const filteredProducts = products.filter(product =>
-        product.name.toLowerCase().includes(nameFilter) &&
-        (categoryFilter === "" || product.category === categoryFilter)
-    );
+    try {
+        let response;
 
-    const tableBody = document.querySelector("#inventoryTable tbody");
-    tableBody.innerHTML = "";
-    filteredProducts.forEach(product => {
-        const row = `
-            <tr>
-                <td>${product.id}</td>
-                <td>${product.name}</td>
-                <td>${product.category}</td>
-                <td>$${product.price.toFixed(2)}</td>
-                <td>${product.stock}</td>
-                <td>${product.size}</td>
-                <td class="actions">
-                    <button onclick="editProduct(${product.id})">Editar</button>
-                    <button onclick="deleteProduct(${product.id})">Eliminar</button>
-                </td>
-            </tr>
-        `;
-        tableBody.innerHTML += row;
-    });
+        if (nameFilter) {
+            response = await fetch(`http://localhost:8080/api/products/search/by-name?name=${nameFilter}`);
+        } else {
+            response = await fetch("http://localhost:8080/api/products");
+        }
+
+        if (response.ok) {
+            let productsData = await response.json();
+            if (categoryFilter) {
+                productsData = productsData.filter(product => product.category === categoryFilter);
+            }
+
+            products = productsData;
+            renderTable();
+        } else {
+            console.error("Error al cargar los productos filtrados:", response.statusText);
+            alert("Hubo un error al cargar los productos filtrados.");
+        }
+    } catch (error) {
+        console.error("Error al comunicarse con el backend:", error);
+        alert("No se pudo conectar al servidor.");
+    }
 }
 
 function openModal(id = null) {
