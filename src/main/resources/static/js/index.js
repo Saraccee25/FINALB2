@@ -302,3 +302,10 @@ function validateEditProductForm() {
     return true;
 }
 
+function clearFilters() {
+    document.getElementById("nameFilter").value = '';
+    document.getElementById("categoryFilter").value = '';
+    applyFilters();
+}
+
+
