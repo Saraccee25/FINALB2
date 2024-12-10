@@ -2,6 +2,7 @@ package com.example.finalBD2.service;
 
 
 import com.example.finalBD2.entity.Product;
+import com.example.finalBD2.exception.ProductNotFoundException;
 import com.example.finalBD2.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -24,6 +25,9 @@ public class ProductService {
     }
 
     public void deleteProduct(String id) {
+        if (!productRepository.existsById(id)) {
+            throw new ProductNotFoundException("El producto con el ID " + id + " no existe.");
+        }
         productRepository.deleteById(id);
     }
 
@@ -34,14 +38,20 @@ public class ProductService {
     }
 
     public List<Product> getProductsByName(String name) {
-        return productRepository.findByNameContainingIgnoreCase(name);
+        List<Product> products = productRepository.findByNameContainingIgnoreCase(name);
+        if (products.isEmpty()) {
+            throw new ProductNotFoundException("No se encontraron productos con el nombre: " + name);
+        }
+        return products;
     }
-
 
     public List<Product> getProductsByCategory(String category) {
-        return productRepository.findByCategoryContainingIgnoreCase(category);
+        List<Product> products = productRepository.findByCategoryContainingIgnoreCase(category);
+        if (products.isEmpty()) {
+            throw new ProductNotFoundException("No se encontraron productos en la categoría: " + category);
+        }
+        return products;
     }
-
 
     public Product updateProduct(String id, Product updatedProduct) {
         Optional<Product> existingProduct = productRepository.findById(id);
@@ -52,8 +62,9 @@ public class ProductService {
             product.setPrice(updatedProduct.getPrice());
             product.setStock(updatedProduct.getStock());
             return productRepository.save(product);
+        } else {
+            throw new ProductNotFoundException("El producto con el ID " + id + " no existe.");
         }
-        return null;
     }
 }
 
