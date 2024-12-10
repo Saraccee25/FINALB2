@@ -70,7 +70,7 @@ async function applyFilters() {
             renderTable();
         } else {
             console.error("Error al cargar los productos filtrados:", response.statusText);
-            alert("Hubo un error al cargar los productos filtrados.");
+            alert("No se encontraron productos que coincidan con los filtros.");
         }
     } catch (error) {
         console.error("Error al comunicarse con el backend:", error);
@@ -230,7 +230,7 @@ document.getElementById("editProductForm").addEventListener("submit", async func
 
 fetchProducts();
 
-// Validación para el formulario de agregar producto
+
 function validateAddProductForm() {
     const name = document.getElementById("addProductName").value.trim();
     const category = document.getElementById("addProductCategory").value;
@@ -266,7 +266,7 @@ function validateAddProductForm() {
     return true;
 }
 
-// Validación para el formulario de editar producto
+
 function validateEditProductForm() {
     const name = document.getElementById("editProductName").value.trim();
     const category = document.getElementById("editProductCategory").value;
