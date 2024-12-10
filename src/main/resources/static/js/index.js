@@ -147,6 +147,10 @@ document.getElementById("addProductForm").addEventListener("submit", async funct
 
     const product = { name, category, price, stock, size };
 
+    if (stock <= 20) {
+        alert("¡Advertencia! El stock de este producto es menor o igual a 20.");
+    }
+
     try {
         const response = await fetch("http://localhost:8080/api/products", {
             method: "POST",
@@ -184,6 +188,10 @@ document.getElementById("editProductForm").addEventListener("submit", async func
     const size = document.getElementById("editProductSize").value;
 
     const product = { id, name, category, price, stock, size };
+
+    if (stock <= 20) {
+        alert("¡Advertencia! El stock de este producto es menor o igual a 20.");
+    }
 
     try {
         const response = await fetch(`http://localhost:8080/api/products/${id}`, {
