@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fashion Line - Gestión de Inventario</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<header>
+    <h1>Fashion Line - Gestión de Inventario</h1>
+</header>
+
+<div class="filters">
+    <div>
+        <input type="text" id="nameFilter" placeholder="Filtrar por nombre">
+        <select id="categoryFilter">
+            <option value="">Todas las categorías</option>
+            <option value="Camisetas">Camisetas</option>
+            <option value="Pantalones">Pantalones</option>
+            <option value="Vestidos">Vestidos</option>
+            <option value="Accesorios">Accesorios</option>
+        </select>
+        <button onclick="applyFilters()">Aplicar Filtros</button>
+    </div>
+    <button onclick="openModal()">Agregar Producto</button>
+</div>
+
+<table id="inventoryTable">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Categoría</th>
+        <th>Precio</th>
+        <th>Stock</th>
+        <th>Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Los productos se cargarán aquí dinámicamente -->
+    </tbody>
+</table>
+
+<div id="productModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2>Agregar/Editar Producto</h2>
+        <form id="productForm">
+            <input type="hidden" id="productId">
+            <input type="text" id="productName" placeholder="Nombre del producto" required><br><br>
+            <select id="productCategory" required>
+                <option value="">Seleccionar categoría</option>
+                <option value="Camisetas">Camisetas</option>
+                <option value="Pantalones">Pantalones</option>
+                <option value="Vestidos">Vestidos</option>
+                <option value="Accesorios">Accesorios</option>
+            </select><br><br>
+            <input type="number" id="productPrice" placeholder="Precio" required><br><br>
+            <input type="number" id="productStock" placeholder="Stock" required><br><br>
+            <button type="submit">Guardar</button>
+        </form>
+    </div>
+</div>
+<script src="js/index.js"></script>
+</body>
+</html>
