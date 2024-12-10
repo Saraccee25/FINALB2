@@ -5,6 +5,15 @@ async function fetchProducts() {
         const response = await fetch("http://localhost:8080/api/products");
         if (response.ok) {
             products = await response.json();
+
+            for (let i = 0; i < products.length; i++) {
+                const product = products[i];
+                if (product.stock === 0) {
+                    await deleteProduct(product.id); 
+                    i--; 
+                }
+            }
+
             renderTable();
         } else {
             console.error("Error al cargar los productos:", response.statusText);
@@ -100,7 +109,9 @@ function closeModal() {
 }
 
 async function deleteProduct(id) {
-    if (confirm("¿Estás seguro de que quieres eliminar este producto?")) {
+    const product = products.find(p => p.id === id);
+
+    if (product.stock === 0 || confirm("¿Estás seguro de que quieres eliminar este producto?")) {
         try {
             const response = await fetch(`http://localhost:8080/api/products/${id}`, {
                 method: "DELETE"
@@ -109,7 +120,9 @@ async function deleteProduct(id) {
             if (response.ok) {
                 products = products.filter(product => product.id !== id);
                 renderTable();
-                alert("Producto eliminado correctamente.");
+                if (product.stock > 0) {
+                    alert("Producto eliminado correctamente.");
+                }
             } else {
                 const error = await response.json();
                 console.error("Error al eliminar el producto:", error);
@@ -121,6 +134,7 @@ async function deleteProduct(id) {
         }
     }
 }
+
 
 document.getElementById("addProductForm").addEventListener("submit", async function (e) {
     e.preventDefault();
