@@ -29,7 +29,7 @@ function renderTable() {
                 <td>${product.stock}</td>
                 <td>${product.size}</td>
                 <td class="actions">
-                    <button onclick="editProduct(${product.id})">Editar</button>
+                    <button onclick="openEditModal('${product.id}')">Editar</button>
                     <button onclick="deleteProduct('${product.id}')">Eliminar</button>
                 </td>
             </tr>
@@ -69,29 +69,34 @@ async function applyFilters() {
     }
 }
 
-function openModal(id = null) {
-    const modal = document.getElementById("productModal");
-    const form = document.getElementById("productForm");
+function openAddModal() {
+    const modal = document.getElementById("addProductModal");
+    const form = document.getElementById("addProductForm");
     form.reset();
-    if (id) {
-        const product = products.find(p => p.id === id);
-        document.getElementById("productId").value = product.id;
-        document.getElementById("productName").value = product.name;
-        document.getElementById("productCategory").value = product.category;
-        document.getElementById("productPrice").value = product.price;
-        document.getElementById("productStock").value = product.stock;
-        document.getElementById("productSize").value = product.size;
-    }
+    modal.style.display = "block";
+}
+
+function openEditModal(id) {
+    const modal = document.getElementById("editProductModal");
+    const form = document.getElementById("editProductForm");
+    form.reset();
+    
+    const product = products.find(p => p.id === id);
+    document.getElementById("editProductId").value = product.id;
+    document.getElementById("editProductName").value = product.name;
+    document.getElementById("editProductCategory").value = product.category;
+    document.getElementById("editProductPrice").value = product.price;
+    document.getElementById("editProductStock").value = product.stock;
+    document.getElementById("editProductSize").value = product.size;
+
     modal.style.display = "block";
 }
 
 function closeModal() {
-    const modal = document.getElementById("productModal");
-    modal.style.display = "none";
-}
-
-function editProduct(id) {
-    openModal(id);
+    const addModal = document.getElementById("addProductModal");
+    const editModal = document.getElementById("editProductModal");
+    addModal.style.display = "none";
+    editModal.style.display = "none";
 }
 
 async function deleteProduct(id) {
@@ -117,43 +122,75 @@ async function deleteProduct(id) {
     }
 }
 
-
-document.getElementById("productForm").addEventListener("submit", async function (e) {
+document.getElementById("addProductForm").addEventListener("submit", async function (e) {
     e.preventDefault();
 
-    const id = document.getElementById("productId").value;
-    const name = document.getElementById("productName").value;
-    const category = document.getElementById("productCategory").value;
-    const price = parseFloat(document.getElementById("productPrice").value);
-    const stock = parseInt(document.getElementById("productStock").value);
-    const size = document.getElementById("productSize").value;
+    const name = document.getElementById("addProductName").value;
+    const category = document.getElementById("addProductCategory").value;
+    const price = parseFloat(document.getElementById("addProductPrice").value);
+    const stock = parseInt(document.getElementById("addProductStock").value);
+    const size = document.getElementById("addProductSize").value;
 
     const product = { name, category, price, stock, size };
 
     try {
-        let response;
-        if (id) {
-            alert("Edición de productos no implementada con el backend.");
-            return;
-        } else {
-            response = await fetch("http://localhost:8080/api/products", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(product),
-            });
-        }
+        const response = await fetch("http://localhost:8080/api/products", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(product),
+        });
 
         if (response.ok) {
             const newProduct = await response.json();
             products.push(newProduct);
             renderTable();
             closeModal();
+            alert("Producto agregado exitosamente.");
         } else {
             const error = await response.json();
             console.error("Error al guardar el producto:", error);
             alert("Hubo un error al guardar el producto.");
+        }
+    } catch (error) {
+        console.error("Error al comunicarse con el backend:", error);
+        alert("No se pudo conectar al servidor.");
+    }
+});
+
+document.getElementById("editProductForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const id = document.getElementById("editProductId").value;
+    const name = document.getElementById("editProductName").value;
+    const category = document.getElementById("editProductCategory").value;
+    const price = parseFloat(document.getElementById("editProductPrice").value);
+    const stock = parseInt(document.getElementById("editProductStock").value);
+    const size = document.getElementById("editProductSize").value;
+
+    const product = { id, name, category, price, stock, size };
+
+    try {
+        const response = await fetch(`http://localhost:8080/api/products/${id}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(product),
+        });
+
+        if (response.ok) {
+            const updatedProduct = await response.json();
+            const index = products.findIndex(p => p.id === id);
+            products[index] = updatedProduct;
+            renderTable();
+            closeModal();
+            alert("Producto editado exitosamente.");
+        } else {
+            const error = await response.json();
+            console.error("Error al editar el producto:", error);
+            alert("Hubo un error al editar el producto.");
         }
     } catch (error) {
         console.error("Error al comunicarse con el backend:", error);
