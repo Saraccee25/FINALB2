@@ -101,11 +101,16 @@ function openEditModal(id) {
     modal.style.display = "block";
 }
 
-function closeModal() {
-    const addModal = document.getElementById("addProductModal");
-    const editModal = document.getElementById("editProductModal");
-    addModal.style.display = "none";
-    editModal.style.display = "none";
+
+function closeAddProductModal() {
+    const modal = document.getElementById("addProductModal");
+    modal.style.display = "none";
+}
+
+
+function closeEditProductModal() {
+    const modal = document.getElementById("editProductModal");
+    modal.style.display = "none";
 }
 
 async function deleteProduct(id) {
