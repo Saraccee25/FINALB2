@@ -1,9 +1,20 @@
-let products = [
-    { id: 1, name: "Camiseta Básica", category: "Camisetas", price: 19.99, stock: 100, size: "M" },
-    { id: 2, name: "Jeans Clásicos", category: "Pantalones", price: 49.99, stock: 50, size: "L" },
-    { id: 3, name: "Vestido de Noche", category: "Vestidos", price: 79.99, stock: 30, size: "S" },
-    { id: 4, name: "Collar de Perlas", category: "Accesorios", price: 29.99, stock: 20, size: "Único" }
-];
+let products = [];
+
+async function fetchProducts() {
+    try {
+        const response = await fetch("http://localhost:8080/api/products");
+        if (response.ok) {
+            products = await response.json();
+            renderTable();
+        } else {
+            console.error("Error al cargar los productos:", response.statusText);
+            alert("Hubo un error al cargar los productos.");
+        }
+    } catch (error) {
+        console.error("Error al comunicarse con el backend:", error);
+        alert("No se pudo conectar al servidor.");
+    }
+}
 
 function renderTable() {
     const tableBody = document.querySelector("#inventoryTable tbody");
@@ -26,7 +37,6 @@ function renderTable() {
         tableBody.innerHTML += row;
     });
 }
-
 
 function applyFilters() {
     const nameFilter = document.getElementById("nameFilter").value.toLowerCase();
@@ -83,10 +93,25 @@ function editProduct(id) {
     openModal(id);
 }
 
-function deleteProduct(id) {
+async function deleteProduct(id) {
     if (confirm("¿Estás seguro de que quieres eliminar este producto?")) {
-        products = products.filter(product => product.id !== id);
-        renderTable();
+        try {
+            const response = await fetch(`http://localhost:8080/api/products/${id}`, {
+                method: "DELETE"
+            });
+
+            if (response.ok) {
+                products = products.filter(product => product.id !== id);
+                renderTable();
+            } else {
+                const error = await response.json();
+                console.error("Error al eliminar el producto:", error);
+                alert("Hubo un error al eliminar el producto.");
+            }
+        } catch (error) {
+            console.error("Error al comunicarse con el backend:", error);
+            alert("No se pudo conectar al servidor.");
+        }
     }
 }
 
@@ -133,4 +158,4 @@ document.getElementById("productForm").addEventListener("submit", async function
     }
 });
 
-renderTable();
+fetchProducts();
