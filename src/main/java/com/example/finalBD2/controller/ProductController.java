@@ -35,7 +35,10 @@ public class ProductController {
             productService.deleteProduct(id);
             return ResponseEntity.ok("El producto con ID " + id + " fue eliminado exitosamente.");
         } catch (ProductNotFoundException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Producto no encontrado.");
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Hubo un error al eliminar el producto.");
         }
     }
 
