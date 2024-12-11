@@ -5,15 +5,6 @@ async function fetchProducts() {
         const response = await fetch("http://localhost:8080/api/products");
         if (response.ok) {
             products = await response.json();
-
-            for (let i = 0; i < products.length; i++) {
-                const product = products[i];
-                if (product.stock === 0) {
-                    await deleteProduct(product.id); 
-                    i--; 
-                }
-            }
-
             renderTable();
         } else {
             console.error("Error al cargar los productos:", response.statusText);
@@ -30,7 +21,7 @@ function renderTable() {
     tableBody.innerHTML = "";
     products.forEach(product => {
         const row = `
-            <tr>
+            <tr class="${product.stock === 0 ? 'low-stock' : ''}">
                 <td class="hidden">${product.id}</td>
                 <td>${product.name}</td>
                 <td>${product.category}</td>
@@ -101,11 +92,16 @@ function openEditModal(id) {
     modal.style.display = "block";
 }
 
-function closeModal() {
-    const addModal = document.getElementById("addProductModal");
-    const editModal = document.getElementById("editProductModal");
-    addModal.style.display = "none";
-    editModal.style.display = "none";
+
+function closeAddProductModal() {
+    const modal = document.getElementById("addProductModal");
+    modal.style.display = "none";
+}
+
+
+function closeEditProductModal() {
+    const modal = document.getElementById("editProductModal");
+    modal.style.display = "none";
 }
 
 async function deleteProduct(id) {
@@ -168,6 +164,7 @@ document.getElementById("addProductForm").addEventListener("submit", async funct
             const newProduct = await response.json();
             products.push(newProduct);
             renderTable();
+            closeAddProductModal();
             closeModal();
             alert("Producto agregado exitosamente.");
         } else {
@@ -215,6 +212,7 @@ document.getElementById("editProductForm").addEventListener("submit", async func
             const index = products.findIndex(p => p.id === id);
             products[index] = updatedProduct;
             renderTable();
+            closeEditProductModal();
             closeModal();
             alert("Producto editado exitosamente.");
         } else {
@@ -229,6 +227,13 @@ document.getElementById("editProductForm").addEventListener("submit", async func
 });
 
 fetchProducts();
+
+function closeModal() {
+    const modal = document.getElementById("addProductModal");
+    const modal1 = document.getElementById("editProductModal");
+    modal.style.display = "none";
+    modal1.style.display = "none";
+}
 
 
 function validateAddProductForm() {
