@@ -62,7 +62,7 @@ Fashion Line es una pequeña tienda de ropa que busca optimizar la gestión de s
 
 ---
 
-### Por Qué Usar MongoDB
+### Por Qué Usar MongoDB ❔
 
 1. **Flexibilidad del Modelo de Datos**:
    MongoDB almacena datos en documentos JSON-like, lo que facilita manejar cambios en la estructura de los datos sin necesidad de modificar esquemas rigídos.
